@@ -10,6 +10,7 @@ import MainScreen from './screens/MainScreen';
 import SignInScreen from './screens/SignInScreen';
 import DefinitionScreen from './screens/DefinitionScreen';
 import LanguageSelectionScreen from './screens/LanguageSelectionScreen';
+import DrawerScreen from './screens/DrawerScreen';
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -73,14 +74,13 @@ export default function Navigation() {
         flex:1
       }}
       onLayout={onLayoutRootView}>
-        <Stack.Navigator  initialRouteName="Main">
+        <Stack.Navigator  initialRouteName="Drawer">
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Main" component={MainScreen}  options={{ headerShown: false }}/>
           <Stack.Screen name="Definition" component={DefinitionScreen} options={{ headerShown: false }}/>
-          <Stack.Screen name="LanguageSelection" component={LanguageSelectionScreen} options={{presentation:"modal"}}/>
-          
+          <Stack.Screen name="Drawer" component={DrawerScreen}  options={{ headerShown: false }}/>
         </Stack.Navigator>
       </View>
     </NavigationContainer>

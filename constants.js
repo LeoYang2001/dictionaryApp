@@ -1,6 +1,7 @@
 export const myColors = {
     fontColor:'#404040',
-    inActiveColor:"rgba(140,140,140,.6)"
+    inActiveColor:"rgba(140,140,140,.6)",
+    paleColor:"rgba(140,140,140,.2)"
 }
 
 

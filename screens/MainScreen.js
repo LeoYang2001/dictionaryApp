@@ -1,17 +1,17 @@
 import { View, Text, SafeAreaView, Image, TouchableOpacity, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Icon from 'react-native-feather'
 import { lang_library, myColors } from '../constants'
 import { KeyboardAvoidingView } from 'react-native'
 import { useDispatch, useSelector } from 'react-redux'
 import { setLang } from '../slices/langSlice'
+import { DrawerActions } from '@react-navigation/native'
+
 
 export default function MainScreen({navigation}) {
 
     const [ifFocused, setIfFocused] = useState(false)
     const [word, setWord] = useState('')
-    const dispatch = useDispatch()
-    const lang = useSelector(state => state.lang)
 
     const handleSearchWord = ()=>{
         if(!word)   return
@@ -19,7 +19,7 @@ export default function MainScreen({navigation}) {
             const ifOneWord = word.trim().split(" ").length <= 1
             if(!ifOneWord)
             {
-                alert('Sorry! Unbale to search multiple words currently!')
+                alert('Sorry! Unbale to search multiple words at a time currently!')
                 setWord('')
                 return
             }
@@ -28,6 +28,8 @@ export default function MainScreen({navigation}) {
         setWord('')
         }
     }
+
+    
 
   return (
     <SafeAreaView className='flex-1 bg-white'>
@@ -39,8 +41,14 @@ export default function MainScreen({navigation}) {
           style={{ flex: 1 }}
         >
        <View className="flex-1">
-       <TouchableOpacity className="mt-2 mx-6">
-        <Icon.AlignLeft color={myColors.fontColor}/>
+       <TouchableOpacity 
+       onPress={()=>{
+        Keyboard.dismiss()
+        //open drawer
+        navigation.dispatch(DrawerActions.openDrawer())
+       }}
+       className="mt-2 mx-6">
+            <Icon.AlignLeft color={myColors.fontColor}/>
         </TouchableOpacity>
         <Image
         style={{height:'36%',width:"100%"}}

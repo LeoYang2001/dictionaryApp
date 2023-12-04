@@ -38,7 +38,7 @@ export default function DefinitionScreen({route, navigation}) {
     }
 
     useEffect(() => {
-        
+        setSelectionId(1)
       const screenWidth = Dimensions.get('window').width;
       const calculatedColumns = Math.floor(screenWidth / 200);
       setVideoUrl(null)
@@ -50,13 +50,13 @@ export default function DefinitionScreen({route, navigation}) {
         getImages();
       }
     }, [currentWord]);
-  
-  
+
+
     const getImages = async () => {
        
         
-      const url = 'https://google-api31.p.rapidapi.com/imagesearch';
-      const options = {
+    const url = 'https://google-api31.p.rapidapi.com/imagesearch';
+    const options = {
         method: 'POST',
         headers: {
           'content-type': 'application/json',
@@ -76,6 +76,8 @@ export default function DefinitionScreen({route, navigation}) {
       };
   
       try {
+        console.log('getting images...');
+        
         const response = await fetch(url, options);
         const result = await response.json();
   
@@ -98,22 +100,26 @@ export default function DefinitionScreen({route, navigation}) {
         if(!searchResult)   return
         const sound = new Audio.Sound();
             try {
+                console.log('sound playing');
+
                 setIfLoadingAudio(true)
-            await sound.loadAsync({ uri: searchResult.audioUrl });
-            await sound.playAsync();
-            setIfLoadingAudio(false)
-            setIfAudio(false)
-            // Your sound is playing!
-            console.log('sound playing');
+                await sound.loadAsync({ uri: searchResult.audioUrl });
+                await sound.playAsync();
+                
+                // Your sound is playing!
             
             // Don't forget to unload the sound from memory
             // when you are done using the Sound object
+
             setTimeout(async ()=>{
                 await sound.unloadAsync();
-                setIfAudio(true)
+                console.log('sound playing stopped');
+                setIfLoadingAudio(false)
             },1500)
             } catch (error) {
             // An error occurred!
+            alert("audio not found")
+            setIfLoadingAudio(false)
             console.log(error);
             
             }
@@ -267,49 +273,26 @@ export default function DefinitionScreen({route, navigation}) {
                                         <Text className="text-3xl text-white font-semibold">
                                             {searchResult?.word }
                                         </Text>
-                                        {
-                                            ifLoadingAudio ? (
-                                                <TouchableOpacity
-                                                disabled={true}
-
-                                            >
-                                                <LinearGradient 
-                                                colors={['#BA4467', '#E54768']}
-                                                start={{ x: 0, y: 0.5 }}  // Horizontal gradient from left to right
-                                                end={{ x: 1, y: 0.5 }}
-                                                style={{width:40,height:40}}
-
-                                                        className=" justify-center items-center rounded-lg px-2 py-1">
-                                                            <ActivityIndicator size="small" color="white" />
-                                                        </LinearGradient>
-                                                        </TouchableOpacity>
-                                                    
-                                            ):(
-                                                <TouchableOpacity
-                                            disabled={!ifAudio || !searchResult?.audioUrl}
-                                            onPress={playAudio}
-                                        >
                                         <LinearGradient 
                                             colors={['#BA4467', '#E54768']}
                                             start={{ x: 0, y: 0.5 }}  // Horizontal gradient from left to right
                                             end={{ x: 1, y: 0.5 }}
                                             style={{width:40,height:40}}
-                                                    className=" justify-center items-center rounded-lg px-2 py-1">
+                                                    className=" justify-center items-center rounded-lg ">
                                                     {
-                                                        ifAudio && searchResult && searchResult.audioUrl ? ( 
-                                                        <Icon.Volume1 className="ml-1 my-1" color={"white"} fill={'white'} width={26} height={26}/>
+                                                        !ifLoadingAudio ? ( 
+                                                        <TouchableOpacity
+                                                         onPress={playAudio}
+                                                        className="rounded-lg  h-full w-full px-2 py-1 justify-center items-center">
+                                                            <Icon.Volume1 className="ml-1 my-1" color={"white"} fill={'white'} width={26} height={26}/>
+                                                        </TouchableOpacity>
                                                         )
                                                         :(
                                                             // <Icon.VolumeX className="ml-1 my-1" color={"white"} fill={'white'} width={26} height={26}/>
-                                                        <VolumePlay/>
-
+                                                            <VolumePlay/>
                                                         )
                                                     }
                                                     </LinearGradient>
-                                                    </TouchableOpacity>
-                                            )
-                                            
-                                        }
                                     </View>
                                     <View className='flex-1 justify-center'>
                                         <Text className="text-md  text-gray-300 font-normal">
