@@ -33,7 +33,7 @@ const CustomDrawerContent = (props) => {
             }}
             labelStyle={{
                 marginLeft:-20,
-                color:myColors.fontColor
+                color:myColors.fontColor,
             }}
     
             icon={()=>(

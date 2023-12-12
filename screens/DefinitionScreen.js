@@ -31,17 +31,23 @@ export default function DefinitionScreen({route, navigation}) {
     const [images, setImages] = useState([]);
     const [numColumns, setNumColumns] = useState(2);
 
-    const [videoUrl, setVideoUrl] = useState(null)
+    const [videoUrl, setVideoUrl] = useState([])
+    const [videoUrlIndex, setVideoUrlIndex] = useState(0)
 
     const saveVideoUrl = (url) => {
         setVideoUrl(url)
+    }
+
+    const refreshVideoIndex = ()=>{
+        if(videoUrlIndex >= 9)  setVideoUrlIndex(0)
+        else    setVideoUrlIndex(preIndex => preIndex + 1)
     }
 
     useEffect(() => {
         setSelectionId(1)
       const screenWidth = Dimensions.get('window').width;
       const calculatedColumns = Math.floor(screenWidth / 200);
-      setVideoUrl(null)
+      setVideoUrl([])
       setNumColumns(calculatedColumns || 2);
       // Change the key to force a re-render when numColumns changes
   
@@ -173,7 +179,11 @@ export default function DefinitionScreen({route, navigation}) {
             
             // Further processing of data if needed
           } catch (error) {
-                console.error('Error fetching data:', error.message);
+                console.log('Error fetching data:', error.status);
+                if (error.message.includes('404')) {
+                    alert('Not found!');
+                    navigation.goBack()
+                }
           }
     }
     
@@ -383,8 +393,7 @@ export default function DefinitionScreen({route, navigation}) {
                         {/* display video list here  */}
                         {
                               selectionId === 3 && (
-                                    <VideoCom currentUrl={videoUrl} saveVideoUrl={saveVideoUrl} word={currentWord}/>
-
+                                    <VideoCom currentUrl={videoUrl} videoUrlIndex={videoUrlIndex} refreshVideoIndex={refreshVideoIndex} saveVideoUrl={saveVideoUrl} word={currentWord}/>
                                 )
                         }
                 </View> 

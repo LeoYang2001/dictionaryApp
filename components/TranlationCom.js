@@ -5,6 +5,8 @@ import { LinearGradient } from 'expo-linear-gradient'
 import * as Icon from 'react-native-feather'
 import { BlurView } from 'expo-blur';
 import MyModal from './MyModal'
+import { useSelector } from 'react-redux'
+import { lang_library_formatted } from '../constants'
 
 
 export default function TranlationCom({word}) {
@@ -14,9 +16,14 @@ export default function TranlationCom({word}) {
     const [modalVisible, setModalVisible] = useState(false);
     const [ifTranslating, setIfTranslating] = useState(false)
 
+    const lang = useSelector(state => state.lang)
+    const langInfo = lang_library_formatted[lang]
+    
+    
+
     useEffect(() => {
         setTranslatedWord('demo')
-      setIfTranslate(false)
+        setIfTranslate(false)
     }, [word])
     
 
@@ -34,7 +41,7 @@ export default function TranlationCom({word}) {
       };
 
     const handleTranslate = async ()=>{
-        const url =  `https://nlp-translation.p.rapidapi.com/v1/translate?text=${word}&to=zh-CN&from=en`;
+        const url =  `https://nlp-translation.p.rapidapi.com/v1/translate?text=${word}&to=${langInfo.apiEntry}&from=en`;
         
         const options = {
             method: 'GET',
@@ -48,9 +55,9 @@ export default function TranlationCom({word}) {
             setIfTranslating(true)
             const response = await fetch(url, options);
             const result = await response.json();
-            if(result?.translated_text['zh-CN'])
+            if(result?.translated_text[langInfo.apiEntry])
             {
-                setTranslatedWord(result?.translated_text['zh-CN'])
+                setTranslatedWord(result?.translated_text[langInfo.apiEntry])
                 setIfTranslate(true)
                 setIfTranslating(false)
             }
@@ -98,7 +105,7 @@ export default function TranlationCom({word}) {
                         </View>
                     ):(
                         <Text className="text-lg text-white">
-                        Chinese
+                        {lang}
                     </Text>
                     )
                    }

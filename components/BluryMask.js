@@ -17,7 +17,7 @@ export default function BluryMask() {
     <View className="h-8 z-30" style={{ backgroundColor: 'rgba(0,0,0,0)' }}>
         {
             init_blurLevel.map((blurLevel,index)=>(
-                <BlurView intensity={blurLevel}  style={{height:`${100/init_blurLevel.length}%`}} >
+                <BlurView key={index} intensity={blurLevel}  style={{height:`${100/init_blurLevel.length}%`}} >
                 </BlurView>
             ))
         }

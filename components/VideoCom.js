@@ -5,12 +5,15 @@ import * as Icon from 'react-native-feather'
 import { LinearGradient } from 'expo-linear-gradient'
 
 
-export default function VideoCom({word, saveVideoUrl, currentUrl}) {
+export default function VideoCom({word, saveVideoUrl, currentUrl, videoUrlIndex, refreshVideoIndex}) {
 
-    const [videoUrl, setVideoUrl] = useState(currentUrl)
+    
+    
+    const [videoUrls, setVideoUrls] = useState(currentUrl)
     const [isLoading, setIsLoading] = useState(false)
     
     const extractVideoId = (url) => {
+        if(!url)    return
         const match = url.match(/[?&]v=([^?&]+)/);
         return match && match[1];
       };
@@ -25,13 +28,13 @@ export default function VideoCom({word, saveVideoUrl, currentUrl}) {
                 'X-RapidAPI-Host': 'google-api31.p.rapidapi.com'
             },
             body: JSON.stringify({
-                text: `${word} meaning SDictionary`,
+                text: `${word}`,
                 safesearch: 'off',
                 timelimit: '',
                 duration: '',
                 resolution: '',
                 region: 'wt-wt',
-                max_results: 4
+                max_results: 10
             })
         };
 
@@ -42,10 +45,14 @@ export default function VideoCom({word, saveVideoUrl, currentUrl}) {
             
 
             if ( result?.length > 0) {
-                const videoUrl = result[0].content
+                
+                const videoUrls = []
+                result?.map(rs => {
+                    videoUrls.push(rs.content)
+                })
                 setIsLoading(false)
-                setVideoUrl(videoUrl)
-                saveVideoUrl(videoUrl)
+                setVideoUrls(videoUrls)
+                saveVideoUrl(videoUrls)
             } else {
                 console.error('No video found.');
             }
@@ -55,15 +62,15 @@ export default function VideoCom({word, saveVideoUrl, currentUrl}) {
     }
 
   return (
-    <View className="mx-6 flex-1 justify-between">
+    <View className="mx-6 flex-1 justify-start">
        
       {
-        videoUrl ? (
+        videoUrls.length > 0 ? (
             <View className=" justify-center  rounded-xl bg-black" style={{ overflow: 'hidden' }}>
             <YoutubePlayer
                 height={192}
                 play={true}
-                videoId={extractVideoId(videoUrl)}
+                videoId={extractVideoId(videoUrls[videoUrlIndex])}
             />
             </View>
         ) : (
@@ -99,7 +106,20 @@ export default function VideoCom({word, saveVideoUrl, currentUrl}) {
             </View>
         )
       }
-       
+      {
+        currentUrl?.length > 0 && (
+            <TouchableOpacity 
+            onPress={refreshVideoIndex}
+            className="self-center mt-auto">
+                    <View
+                         className="flex-row justify-center border items-center rounded-lg px-4 py-2">
+                         <Text
+                             className="text-black ml-1"
+                         >Refresh</Text>
+                 </View>
+            </TouchableOpacity>
+        )
+      }
     </View>
   )
 }

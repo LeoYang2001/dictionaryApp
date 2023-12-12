@@ -1,12 +1,17 @@
 import { View, Text, Button, SafeAreaView, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
 import * as Icon from 'react-native-feather'
-import { myColors } from '../constants'
+import { lang_library_formatted, myColors } from '../constants'
 import LanguageItem from '../components/LanguageItem'
 import { DrawerActions } from '@react-navigation/native'
+import { useSelector } from 'react-redux'
 
+const langs = Object.keys(lang_library_formatted)
 
 export default function LanguageSelectionScreen({navigation}) {
+
+  const curLang  = useSelector(state => state.lang)
+
   return (
     <SafeAreaView className=" flex-1" >
       <TouchableOpacity
@@ -23,9 +28,12 @@ export default function LanguageSelectionScreen({navigation}) {
       </View>
       <View className=" flex-1 mx-6"> 
         <ScrollView>
-          <View className="flex-1 flex-row  justify-between px-2">
-          <LanguageItem ifSelected={true}/>
-          <LanguageItem  ifSelected={false}/>
+          <View className="flex-1 flex-row  justify-between px-2 flex-wrap">
+            {
+              langs.map((langItem,index) => (
+                <LanguageItem key={index} langItem={langItem} ifSelected={ langItem === curLang }/>
+              ))
+            }
           </View>
         </ScrollView>
       </View>

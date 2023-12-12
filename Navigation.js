@@ -5,7 +5,6 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { Text, View } from 'react-native';
-import HomeScreen from './screens/HomeScreen';
 import MainScreen from './screens/MainScreen';
 import SignInScreen from './screens/SignInScreen';
 import DefinitionScreen from './screens/DefinitionScreen';
@@ -77,7 +76,6 @@ export default function Navigation() {
         <Stack.Navigator  initialRouteName="Drawer">
           <Stack.Screen name="SignIn" component={SignInScreen} />
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Main" component={MainScreen}  options={{ headerShown: false }}/>
           <Stack.Screen name="Definition" component={DefinitionScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="Drawer" component={DrawerScreen}  options={{ headerShown: false }}/>

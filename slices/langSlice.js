@@ -6,7 +6,7 @@ import { lang_library } from "../constants";
 
 const langSlice = createSlice({
     name:'lang',
-    initialState:lang_library.Chinese_sim,
+    initialState:'Chinese',
     reducers:{
         setLang:(state, action) => {
            return action.payload.newLang; 
