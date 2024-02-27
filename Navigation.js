@@ -8,8 +8,10 @@ import { Text, View } from 'react-native';
 import MainScreen from './screens/MainScreen';
 import SignInScreen from './screens/SignInScreen';
 import DefinitionScreen from './screens/DefinitionScreen';
-import LanguageSelectionScreen from './screens/LanguageSelectionScreen';
 import DrawerScreen from './screens/DrawerScreen';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import SignUpScreen from './screens/SignUpScreen';
+
 
 // Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync();
@@ -50,6 +52,7 @@ export default function Navigation() {
 
     prepare();
   }, []);
+  
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
@@ -73,9 +76,11 @@ export default function Navigation() {
         flex:1
       }}
       onLayout={onLayoutRootView}>
-        <Stack.Navigator  initialRouteName="Drawer">
-          <Stack.Screen name="SignIn" component={SignInScreen} />
+        <Stack.Navigator  initialRouteName={'SignIn'}>
+          <Stack.Screen name="SignIn"  component={SignInScreen} 
+           options={{headerShown: false}}/>
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
+          <Stack.Screen name="SignUp" options={{ headerShown: false }} component={SignUpScreen} />
           <Stack.Screen name="Main" component={MainScreen}  options={{ headerShown: false }}/>
           <Stack.Screen name="Definition" component={DefinitionScreen} options={{ headerShown: false }}/>
           <Stack.Screen name="Drawer" component={DrawerScreen}  options={{ headerShown: false }}/>

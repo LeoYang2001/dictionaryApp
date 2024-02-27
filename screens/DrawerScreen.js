@@ -8,6 +8,7 @@ import { myColors } from '../constants';
 import { useDispatch, useSelector } from 'react-redux';
 import { toggle, open } from '../slices/langSettingSlice';
 import LanguageSelectionScreen from './LanguageSelectionScreen';
+import { getAuth, signOut } from "firebase/auth";
 
 
 
@@ -15,7 +16,18 @@ export default function DrawerScreen({navigation}) {
 
     const Drawer = createDrawerNavigator();
 
-
+  const signOutUser = ()=>{
+        const auth = getAuth();
+        signOut(auth).then(() => {
+          // Sign-out successful.
+            console.log('signedOut successful');
+            navigation.replace('SignIn')
+        }).catch((error) => {
+          // An error happened.
+          console.log(error);
+          
+        });
+  }
 
 const CustomDrawerContent = (props) => {
     
@@ -28,9 +40,7 @@ const CustomDrawerContent = (props) => {
           <DrawerItem
             
             label="Logout"
-            onPress={() => {
-              // Add your logout logic here
-            }}
+            onPress={signOutUser}
             labelStyle={{
                 marginLeft:-20,
                 color:myColors.fontColor,
